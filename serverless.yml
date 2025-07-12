@@ -27,6 +27,13 @@ functions:
       - http:
           method: POST
           path: /auction
+  
+  getAuctions:
+    handler: src/handler.getAuctions
+    events:
+      - http:
+          method: GET
+          path: /auctions
 
 package:
   individually: true
