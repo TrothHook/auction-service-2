@@ -1,12 +1,20 @@
-import { v4 as uuid } from "uuid";
 import AWS from "aws-sdk";
 import createError from "http-errors";
+import { getAuctionById } from "./auctions.service.js";
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 export const placeBidService = async (event, context) => {
+  let updateAuction;
   const { id } = event.pathParameters;
   const { amount } = event.body;
+  const auction = await getAuctionById(id);
+
+  if (amount <= auction.highestBid.amount) {
+    throw new createError.Forbidden(
+      `Your bid must be higher than ${auction.highestBid.amount}`
+    );
+  }
 
   const params = {
     TableName: process.env.AUCTIONS_TABLE_NAME,
@@ -17,8 +25,6 @@ export const placeBidService = async (event, context) => {
     },
     ReturnValues: "ALL_NEW",
   };
-
-  let updateAuction;
 
   try {
     const result = await dynamodb.update(params).promise();

@@ -4,6 +4,12 @@ import createError from "http-errors";
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
+/**
+ *
+ * @param {*} event
+ * @param {*} context
+ * @returns
+ */
 export const createAuctionService = async (event, context) => {
   const { title } = event.body;
 
@@ -35,6 +41,12 @@ export const createAuctionService = async (event, context) => {
   };
 };
 
+/**
+ *
+ * @param {*} event
+ * @param {*} context
+ * @returns
+ */
 export const getAuctionsService = async (event, context) => {
   let auctions;
 
@@ -58,10 +70,24 @@ export const getAuctionsService = async (event, context) => {
   };
 };
 
+/**
+ *
+ * @param {*} event
+ * @param {*} context
+ * @returns
+ */
 export const getAuctionService = async (event, context) => {
   let auction;
   const { id } = event.pathParameters;
+  auction = await getAuctionById(id);
+  return {
+    statusCode: 200,
+    body: JSON.stringify(auction),
+  };
+};
 
+export const getAuctionById = async (id) => {
+  let auction;
   try {
     const result = await dynamodb
       .get({
@@ -78,9 +104,5 @@ export const getAuctionService = async (event, context) => {
   if (!auction) {
     throw new createError.NotFound(`Auction with ID ${id} is not found!`);
   }
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(auction),
-  };
+  return auction;
 };
