@@ -12,6 +12,9 @@ export const createAuctionService = async (event, context) => {
     title,
     status: "OPEN",
     createdAt: new Date().toLocaleString("sv-SE"),
+    highestBid: {
+      amount: 0,
+    },
   };
 
   try {

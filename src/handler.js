@@ -1,5 +1,10 @@
-import { createAuctionService, getAuctionService, getAuctionsService } from "./service/auctions.service.js";
+import {
+  createAuctionService,
+  getAuctionService,
+  getAuctionsService,
+} from "./service/auctions.service.js";
 import { middyfy } from "./middlewares/middyfy.js";
+import { placeBidService } from "./service/place-bid.service.js";
 
 const createAuctionHandler = async (event, context) => {
   return await createAuctionService(event, context);
@@ -15,3 +20,8 @@ const getAuctionHandler = async (event, context) => {
   return await getAuctionService(event, context);
 };
 export const getAuction = middyfy(getAuctionHandler);
+
+const placeBidHandler = async (event, context) => {
+  return await placeBidService(event, context);
+};
+export const placeBid = middyfy(placeBidHandler);
