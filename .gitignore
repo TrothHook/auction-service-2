@@ -1,0 +1,4 @@
+node_modules
+env.yml
+package-lock.json
+.serverless
