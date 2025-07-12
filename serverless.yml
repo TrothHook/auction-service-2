@@ -1,7 +1,8 @@
 service: sls-base
 
 custom:
-  region: us-east-1
+  region: ${file(./env.yml):${opt:stage, 'dev'}.region}
+  AuctionsTable: AuctionsTable-${opt:stage, 'dev'}
 
 provider:
   name: aws
@@ -9,6 +10,8 @@ provider:
   region: ${self:custom.region}
   memorySize: 256
   stage: ${opt:stage, 'dev'}
+  environment:
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable}
   lambdaHashingVersion: 20201221
   iamRoleStatements:
     - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
