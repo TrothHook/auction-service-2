@@ -35,5 +35,12 @@ functions:
           method: GET
           path: /auctions
 
+  getAuction:
+    handler: src/handler.getAuction
+    events:
+      - http:
+          method: GET
+          path: /auction/{id}
+
 package:
   individually: true
