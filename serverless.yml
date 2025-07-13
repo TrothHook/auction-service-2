@@ -49,5 +49,10 @@ functions:
           method: PATCH
           path: /auction/{id}/bid
 
+  processAuctions:
+    handler: src/handler.processAuctions
+    events:
+      - schedule: rate(300 minutes)
+
 package:
   individually: true

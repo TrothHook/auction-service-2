@@ -4,6 +4,13 @@ import { getAuctionById } from "./auctions.service.js";
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
+/**
+ *
+ * @param {*} event
+ * @param {*} context
+ * @returns
+ */
+
 export const placeBidService = async (event, context) => {
   let updateAuction;
   const { id } = event.pathParameters;
@@ -43,3 +50,8 @@ export const placeBidService = async (event, context) => {
     body: JSON.stringify(updateAuction),
   };
 };
+
+/**
+ *
+ */
+export const processAuctionsService = async () => {};
