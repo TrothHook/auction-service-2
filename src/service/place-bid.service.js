@@ -1,6 +1,8 @@
 import AWS from "aws-sdk";
 import createError from "http-errors";
 import { getAuctionById } from "./auctions.service.js";
+import { getEndedAuctions } from "../lib/getEndedAuctions.js";
+import { closeAuction } from "../lib/closeAuction.js";
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -54,4 +56,17 @@ export const placeBidService = async (event, context) => {
 /**
  *
  */
-export const processAuctionsService = async () => {};
+export const processAuctionsService = async () => {
+  try {
+    const auctionsToClose = await getEndedAuctions();
+    console.log("auctionsToClose------------------>", auctionsToClose);
+    const closePromises = auctionsToClose.map((auction) =>
+      closeAuction(auction)
+    );
+    await Promise.all(closePromises);
+    return { closed: closePromises.length };
+  } catch (error) {
+    console.log("processAuctionServiceError------>");
+    throw new createError.InternalServerError(error);
+  }
+};
