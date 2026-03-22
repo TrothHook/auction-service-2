@@ -98,6 +98,11 @@ export const getAuctionService = async (event, context) => {
   };
 };
 
+/**
+ * 
+ * @param {*} id 
+ * @returns 
+ */
 export const getAuctionById = async (id) => {
   let auction;
   try {
